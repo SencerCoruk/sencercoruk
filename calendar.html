@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Etkinlik Takvimi | Sencer & İncinaz</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #5D45DB;
+            --secondary-color: #FF8A5B;
+            --accent-color: #00D4FF;
+            --dark-color: #2B2D42;
+            --light-color: #F8F7FF;
+        }
+        
+        .calendar-page {
+            padding-top: 120px;
+            padding-bottom: 80px;
+            background: linear-gradient(135deg, #5D45DB10, #FF8A5B10), 
+                        url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100%" height="100%" fill="white"/><path d="M0 10 L100 10" stroke="%235D45DB10" stroke-width="1"/><path d="M0 20 L100 20" stroke="%235D45DB08" stroke-width="0.5"/><path d="M0 30 L100 30" stroke="%235D45DB10" stroke-width="1"/><path d="M0 40 L100 40" stroke="%235D45DB08" stroke-width="0.5"/><path d="M0 50 L100 50" stroke="%235D45DB10" stroke-width="1"/><path d="M0 60 L100 60" stroke="%235D45DB08" stroke-width="0.5"/><path d="M0 70 L100 70" stroke="%235D45DB10" stroke-width="1"/><path d="M0 80 L100 80" stroke="%235D45DB08" stroke-width="0.5"/><path d="M0 90 L100 90" stroke="%235D45DB10" stroke-width="1"/><path d="M10 0 L10 100" stroke="%23FF8A5B10" stroke-width="1"/><path d="M20 0 L20 100" stroke="%23FF8A5B08" stroke-width="0.5"/><path d="M30 0 L30 100" stroke="%23FF8A5B10" stroke-width="1"/><path d="M40 0 L40 100" stroke="%23FF8A5B08" stroke-width="0.5"/><path d="M50 0 L50 100" stroke="%23FF8A5B10" stroke-width="1"/><path d="M60 0 L60 100" stroke="%23FF8A5B08" stroke-width="0.5"/><path d="M70 0 L70 100" stroke="%23FF8A5B10" stroke-width="1"/><path d="M80 0 L80 100" stroke="%23FF8A5B08" stroke-width="0.5"/><path d="M90 0 L90 100" stroke="%23FF8A5B10" stroke-width="1"/></svg>');
+            min-height: 100vh;
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .calendar-container {
+            max-width: 850px;
+            margin: 0 auto;
+            background-color: var(--light-color);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(93, 69, 219, 0.15);
+            padding: 35px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .calendar-container::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(var(--secondary-color), transparent 70%);
+            opacity: 0.2;
+            z-index: 0;
+        }
+        
+        .calendar-container::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: -50px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(var(--primary-color), transparent 70%);
+            opacity: 0.2;
+            z-index: 0;
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .calendar-header h3 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .calendar-nav {
+            display: flex;
+            gap: 15px;
+            background-color: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .calendar-nav button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: var(--dark-color);
+            padding: 5px 10px;
+            border-radius: 50px;
+            transition: all 0.3s;
+        }
+        
+        .calendar-nav button:hover {
+            background-color: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        #today {
+            background-color: var(--primary-color);
+            color: white;
+            font-weight: 500;
+            padding: 5px 15px;
+        }
+        
+        #today:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .calendar-day-header {
+            text-align: center;
+            font-weight: 600;
+            color: var(--dark-color);
+            padding: 12px 5px;
+            background-color: rgba(93, 69, 219, 0.1);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .calendar-day {
+            min-height: 90px;
+            border: none;
+            background-color: white;
+            border-radius: 12px;
+            padding: 12px;
+            position: relative;
+            transition: all 0.3s;
+            cursor: pointer;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+        }
+        
+        .calendar-day:hover {
+            background-color: white;
+            box-shadow: 0 8px 25px rgba(93, 69, 219, 0.15);
+            transform: translateY(-3px);
+        }
+        
+        .calendar-day.empty {
+            background-color: transparent;
+            box-shadow: none;
+            cursor: default;
+        }
+        
+        .calendar-day.empty:hover {
+            transform: none;
+        }
+        
+        .calendar-day.today {
+            border: none;
+            background: linear-gradient(135deg, rgba(93, 69, 219, 0.1), rgba(0, 212, 255, 0.1));
+            box-shadow: 0 5px 15px rgba(93, 69, 219, 0.2);
+        }
+        
+        .calendar-day.today::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary-color), var(--accent-color));
+            border-radius: 4px 4px 0 0;
+        }
+        
+        .day-number {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--dark-color);
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 2px 7px;
+            border-radius: 50px;
+        }
+        
+        .day-notes {
+            margin-top: 26px;
+            font-size: 0.85rem;
+            word-break: break-word;
+            color: var(--dark-color);
+            max-height: 60px;
+            overflow: hidden;
+            line-height: 1.4;
+        }
+        
+        .has-notes {
+            background: linear-gradient(135deg, white, rgba(255, 138, 91, 0.08));
+        }
+        
+        .has-notes::after {
+            content: '';
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(255, 138, 91, 0.2);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(43, 45, 66, 0.7);
+            backdrop-filter: blur(3px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background-color: var(--light-color);
+            border-radius: 16px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+            max-width: 550px;
+            width: 90%;
+            padding: 40px;
+            position: relative;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 1.4rem;
+            color: var(--dark-color);
+            cursor: pointer;
+            background: none;
+            border: none;
+            opacity: 0.7;
+            transition: all 0.3s;
+        }
+        
+        .modal-close:hover {
+            opacity: 1;
+            transform: rotate(90deg);
+        }
+        
+        .modal-title {
+            margin-top: 0;
+            margin-bottom: 25px;
+            color: var(--primary-color);
+            font-size: 1.6rem;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(93, 69, 219, 0.2);
+            padding-bottom: 15px;
+        }
+        
+        .modal-form textarea {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid rgba(93, 69, 219, 0.2);
+            border-radius: 12px;
+            min-height: 180px;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 25px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background-color: white;
+            resize: none;
+        }
+        
+        .modal-form textarea:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(93, 69, 219, 0.2);
+            border-color: var(--primary-color);
+        }
+        
+        .modal-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+        
+        .modal-actions button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s;
+            flex: 1;
+        }
+        
+        .save-btn {
+            background: linear-gradient(135deg, var(--primary-color), #7365DF);
+            color: white;
+            box-shadow: 0 8px 20px rgba(93, 69, 219, 0.3);
+        }
+        
+        .save-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(93, 69, 219, 0.4);
+        }
+        
+        .delete-btn {
+            background-color: white;
+            color: #E63946;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(230, 57, 70, 0.3);
+        }
+        
+        .delete-btn:hover {
+            background-color: #E63946;
+            color: white;
+            border: 1px solid #E63946;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo left">İncinaz</div>
+            <div class="logo right">Sencer</div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Anasayfa</a></li>
+                <li><a href="index.html#etkinlikler">Etkinlikler</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="calendar-page">
+        <div class="container">
+            <h2 class="page-title">Etkinlik Takvimi</h2>
+            
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <h3 id="month-year">Haziran 2023</h3>
+                    <div class="calendar-nav">
+                        <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
+                        <button id="today">Bugün</button>
+                        <button id="next-month"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+                
+                <div class="calendar-grid" id="calendar-days-header">
+                    <div class="calendar-day-header">Pzt</div>
+                    <div class="calendar-day-header">Sal</div>
+                    <div class="calendar-day-header">Çar</div>
+                    <div class="calendar-day-header">Per</div>
+                    <div class="calendar-day-header">Cum</div>
+                    <div class="calendar-day-header">Cmt</div>
+                    <div class="calendar-day-header">Paz</div>
+                </div>
+                
+                <div class="calendar-grid" id="calendar-days">
+                    <!-- Günler JavaScript ile doldurulacak -->
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Not Ekleme/Düzenleme Modal -->
+    <div class="modal" id="note-modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close"><i class="fas fa-times"></i></button>
+            <h3 class="modal-title" id="modal-date">12 Haziran 2023</h3>
+            <div class="modal-form">
+                <textarea id="note-text" placeholder="Bu gün için not ekleyin..."></textarea>
+                <div class="modal-actions">
+                    <button class="delete-btn" id="delete-note">Notu Sil</button>
+                    <button class="save-btn" id="save-note">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">S & İ</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Takvim veri yapısı
+        let calendarData = JSON.parse(localStorage.getItem('calendarNotes') || '{}');
+        let currentDate = new Date();
+        let currentMonth = currentDate.getMonth();
+        let currentYear = currentDate.getFullYear();
+        let selectedDate = null;
+        
+        // Modal elementleri
+        const noteModal = document.getElementById('note-modal');
+        const modalDate = document.getElementById('modal-date');
+        const noteText = document.getElementById('note-text');
+        const saveNoteBtn = document.getElementById('save-note');
+        const deleteNoteBtn = document.getElementById('delete-note');
+        const modalCloseBtn = document.getElementById('modal-close');
+        
+        // Takvim oluşturma
+        function renderCalendar() {
+            const monthYear = document.getElementById('month-year');
+            const calendarDays = document.getElementById('calendar-days');
+            
+            // Ay ve yıl başlığını ayarlama
+            const monthNames = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 
+                               'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'];
+            monthYear.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+            
+            // Takvim günlerini temizleme
+            calendarDays.innerHTML = '';
+            
+            // Ay'ın ilk günü ve gün sayısı
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            const lastDay = new Date(currentYear, currentMonth + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            
+            // İlk günün haftanın hangi günü olduğunu bulma (0=Pazar, 1=Pazartesi, ...)
+            // Türkiye'de hafta Pazartesi başladığı için düzenliyoruz
+            let firstDayIndex = firstDay.getDay() - 1;
+            if (firstDayIndex < 0) firstDayIndex = 6; // Pazar günü için
+            
+            // Önceki ayın boş günlerini ekleme
+            for (let i = 0; i < firstDayIndex; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day empty';
+                calendarDays.appendChild(emptyDay);
+            }
+            
+            // Bugünün tarihini alma
+            const today = new Date();
+            const todayDate = today.getDate();
+            const todayMonth = today.getMonth();
+            const todayYear = today.getFullYear();
+            
+            // Ayın günlerini ekleme
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                
+                // Bugünü vurgulama
+                if (day === todayDate && currentMonth === todayMonth && currentYear === todayYear) {
+                    dayElement.classList.add('today');
+                }
+                
+                // Gün numarasını ekleme
+                const dayNumber = document.createElement('div');
+                dayNumber.className = 'day-number';
+                dayNumber.textContent = day;
+                dayElement.appendChild(dayNumber);
+                
+                // Notları kontrol etme ve gösterme
+                const dateKey = `${currentYear}-${currentMonth+1}-${day}`;
+                if (calendarData[dateKey]) {
+                    dayElement.classList.add('has-notes');
+                    
+                    const dayNotes = document.createElement('div');
+                    dayNotes.className = 'day-notes';
+                    dayNotes.textContent = calendarData[dateKey];
+                    dayElement.appendChild(dayNotes);
+                }
+                
+                // Gün tıklama olayları
+                dayElement.addEventListener('click', () => {
+                    selectedDate = {
+                        day: day,
+                        month: currentMonth,
+                        year: currentYear,
+                        dateKey: dateKey
+                    };
+                    
+                    // Modal başlığını ayarlama
+                    modalDate.textContent = `${day} ${monthNames[currentMonth]} ${currentYear}`;
+                    
+                    // Varsa mevcut notu gösterme
+                    noteText.value = calendarData[dateKey] || '';
+                    
+                    // Modal'ı gösterme
+                    noteModal.style.display = 'flex';
+                });
+                
+                calendarDays.appendChild(dayElement);
+            }
+        }
+        
+        // Modal işlemleri
+        modalCloseBtn.addEventListener('click', () => {
+            noteModal.style.display = 'none';
+        });
+        
+        // Not kaydetme
+        saveNoteBtn.addEventListener('click', () => {
+            const note = noteText.value.trim();
+            
+            if (selectedDate) {
+                if (note) {
+                    calendarData[selectedDate.dateKey] = note;
+                } else {
+                    delete calendarData[selectedDate.dateKey];
+                }
+                
+                // LocalStorage'a kaydetme
+                localStorage.setItem('calendarNotes', JSON.stringify(calendarData));
+                
+                // Takvimi güncelleme
+                renderCalendar();
+                
+                // Modal'ı kapatma
+                noteModal.style.display = 'none';
+            }
+        });
+        
+        // Not silme
+        deleteNoteBtn.addEventListener('click', () => {
+            if (selectedDate && calendarData[selectedDate.dateKey]) {
+                delete calendarData[selectedDate.dateKey];
+                
+                // LocalStorage'a kaydetme
+                localStorage.setItem('calendarNotes', JSON.stringify(calendarData));
+                
+                // Takvimi güncelleme
+                renderCalendar();
+                
+                // Modal'ı kapatma
+                noteModal.style.display = 'none';
+            }
+        });
+        
+        // Ay navigasyonu
+        document.getElementById('prev-month').addEventListener('click', () => {
+            currentMonth--;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            }
+            renderCalendar();
+        });
+        
+        document.getElementById('next-month').addEventListener('click', () => {
+            currentMonth++;
+            if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar();
+        });
+        
+        document.getElementById('today').addEventListener('click', () => {
+            const today = new Date();
+            currentMonth = today.getMonth();
+            currentYear = today.getFullYear();
+            renderCalendar();
+        });
+        
+        // Modal dışına tıklanınca kapatma
+        window.addEventListener('click', (e) => {
+            if (e.target === noteModal) {
+                noteModal.style.display = 'none';
+            }
+        });
+        
+        // Sayfa yüklendiğinde takvimi oluşturma
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCalendar();
+        });
+    </script>
+</body>
+</html> 

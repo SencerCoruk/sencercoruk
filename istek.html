@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İstek Kutusu | Sencer & İncinaz</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto 30px;
+            padding: 30px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .request-page {
+            padding-top: 120px;
+            padding-bottom: 80px;
+            background: linear-gradient(135deg, rgba(142, 68, 173, 0.1), rgba(231, 76, 60, 0.1));
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+        }
+        
+        .requests-container {
+            max-width: 600px;
+            margin: 0 auto 30px;
+            padding: 30px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .request-item {
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            position: relative;
+        }
+        
+        .request-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .request-text {
+            margin-bottom: 10px;
+        }
+        
+        .request-date {
+            font-size: 12px;
+            color: #777;
+        }
+        
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .no-requests {
+            text-align: center;
+            color: #777;
+            padding: 20px;
+        }
+        
+        .clear-all {
+            text-align: right;
+            margin-top: 10px;
+        }
+        
+        .clear-all button {
+            background: none;
+            border: none;
+            color: #e74c3c;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo left">İncinaz</div>
+            <div class="logo right">Sencer</div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Anasayfa</a></li>
+                <li><a href="index.html#etkinlikler">Etkinlikler</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="request-page">
+        <div class="container">
+            <h2 class="page-title">İstek Kutusu</h2>
+            
+            <!-- İstek Listesi -->
+            <div class="requests-container">
+                <h3>Gönderilen İstekler</h3>
+                <div id="requests-list">
+                    <!-- İstekler buraya JavaScript ile eklenecek -->
+                    <div class="no-requests" id="no-requests">Henüz istek gönderilmedi.</div>
+                </div>
+                <div class="clear-all">
+                    <button id="clear-all-btn">Tümünü Temizle</button>
+                </div>
+            </div>
+            
+            <!-- İstek Formu -->
+            <div class="form-container">
+                <h3>Yeni İstek Gönder</h3>
+                <form id="suggestion-form">
+                    <div class="form-group">
+                        <label for="message">Mesajınız</label>
+                        <textarea id="message" name="message" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn">GÖNDER</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">S & İ</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // LocalStorage'dan istekleri yükleme
+        function loadRequests() {
+            const requests = JSON.parse(localStorage.getItem('requests') || '[]');
+            const requestsList = document.getElementById('requests-list');
+            const noRequests = document.getElementById('no-requests');
+            
+            // Mevcut içeriği temizle
+            requestsList.innerHTML = '';
+            
+            if (requests.length === 0) {
+                requestsList.appendChild(noRequests);
+                return;
+            }
+            
+            // Her isteği listeye ekle
+            requests.forEach((request, index) => {
+                const requestItem = document.createElement('div');
+                requestItem.className = 'request-item';
+                requestItem.innerHTML = `
+                    <p class="request-text">${request.message}</p>
+                    <p class="request-date">${request.date}</p>
+                    <button class="delete-btn" data-index="${index}">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                requestsList.appendChild(requestItem);
+            });
+            
+            // Silme butonlarına event listener ekle
+            document.querySelectorAll('.delete-btn').forEach(button => {
+                button.addEventListener('click', function() {
+                    const index = parseInt(this.getAttribute('data-index'));
+                    deleteRequest(index);
+                });
+            });
+        }
+        
+        // İsteği silme
+        function deleteRequest(index) {
+            const requests = JSON.parse(localStorage.getItem('requests') || '[]');
+            requests.splice(index, 1);
+            localStorage.setItem('requests', JSON.stringify(requests));
+            loadRequests();
+        }
+        
+        // Tüm istekleri temizleme
+        document.getElementById('clear-all-btn').addEventListener('click', function() {
+            if (confirm('Tüm istekleri silmek istediğinize emin misiniz?')) {
+                localStorage.removeItem('requests');
+                loadRequests();
+            }
+        });
+        
+        // Form gönderimi
+        document.getElementById('suggestion-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const messageInput = document.getElementById('message');
+            const message = messageInput.value.trim();
+            
+            if (!message) return;
+            
+            // Yeni isteği oluştur
+            const newRequest = {
+                message: message,
+                date: new Date().toLocaleString('tr-TR')
+            };
+            
+            // LocalStorage'a kaydet
+            const requests = JSON.parse(localStorage.getItem('requests') || '[]');
+            requests.unshift(newRequest); // Yeni isteği başa ekle
+            localStorage.setItem('requests', JSON.stringify(requests));
+            
+            // Formu temizle
+            messageInput.value = '';
+            
+            // İstek listesini güncelle
+            loadRequests();
+            
+            // Başarı mesajı
+            alert('İsteğiniz başarıyla kaydedildi!');
+        });
+        
+        // Sayfa yüklendiğinde istekleri yükle
+        document.addEventListener('DOMContentLoaded', loadRequests);
+    </script>
+</body>
+</html> 

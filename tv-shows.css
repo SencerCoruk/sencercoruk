@@ -1,0 +1,266 @@
+.tv-shows-main {
+    padding-top: 100px;
+    min-height: calc(100vh - 250px);
+}
+
+.tv-shows-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+}
+
+.tv-shows-container h1 {
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-size: 2.5rem;
+}
+
+.subtitle {
+    text-align: center;
+    color: var(--dark-color);
+    margin-bottom: 40px;
+    font-size: 1.1rem;
+}
+
+.shows-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+.show-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.show-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.show-image {
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+}
+
+.show-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.5s ease;
+}
+
+.show-card:hover .show-image img {
+    transform: scale(1.05);
+}
+
+.new-show-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    color: var(--primary-color);
+    position: relative;
+}
+
+.new-show-image::after {
+    content: 'Yeni Dizi';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+.new-show-image i {
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.show-content {
+    padding: 20px;
+}
+
+.show-content h3 {
+    color: var(--dark-color);
+    margin-bottom: 10px;
+    font-size: 1.4rem;
+}
+
+.show-description {
+    color: #666;
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    min-height: 70px;
+}
+
+.show-details {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    color: #777;
+    font-size: 0.9rem;
+}
+
+.show-details span {
+    display: flex;
+    align-items: center;
+}
+
+.show-details i {
+    margin-right: 5px;
+    color: var(--primary-color);
+}
+
+.watch-btn {
+    width: 100%;
+    padding: 12px;
+}
+
+.new-show-form {
+    margin-bottom: 15px;
+}
+
+.new-show-form input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.new-show-form input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+/* Seçim ve Onay Bölümleri */
+.selected-show, .confirmation-message {
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    margin: 40px auto;
+    max-width: 600px;
+}
+
+.selected-show h2 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+}
+
+.selected-show p {
+    margin-bottom: 20px;
+    color: #666;
+}
+
+.time-selector {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    justify-content: center;
+}
+
+.time-selector input, .phone-selector input {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.time-selector input:focus, .phone-selector input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.phone-selector {
+    margin-bottom: 25px;
+    text-align: left;
+    max-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.phone-selector label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--dark-color);
+}
+
+.phone-selector input {
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.phone-selector small {
+    color: #888;
+    font-size: 0.8rem;
+    display: block;
+}
+
+.confirm-btn {
+    padding: 14px 30px;
+    font-size: 1rem;
+}
+
+/* Onay mesajı */
+.confirmation-message {
+    text-align: center;
+}
+
+.confirmation-message i {
+    font-size: 4rem;
+    color: #4CAF50;
+    margin-bottom: 20px;
+}
+
+.confirmation-message h3 {
+    color: var(--dark-color);
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
+
+.confirmation-message p {
+    margin-bottom: 8px;
+    color: #666;
+}
+
+.confirmation-message .btn {
+    margin-top: 25px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .shows-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+    
+    .time-selector {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .show-details {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+} 

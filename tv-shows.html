@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dizi İzleme | Sencer & İncinaz</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="tv-shows.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo left">İncinaz</div>
+            <div class="logo right">Sencer</div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Ana Sayfa</a></li>
+                <li><a href="index.html#etkinlikler">Etkinlikler</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="tv-shows-main">
+        <section class="tv-shows-container">
+            <h1>Dizi İzleme</h1>
+            <p class="subtitle">Birlikte izlemek için dizi seçin</p>
+            
+            <div class="shows-grid">
+                <div class="show-card" id="modern-family">
+                    <div class="show-image">
+                        <img src="mf.jpeg" alt="Modern Family">
+                    </div>
+                    <div class="show-content">
+                        <h3>Modern Family</h3>
+                        <p class="show-description">Üç farklı aile tipini konu alan, komedi dolu bir dizi. Ailevi ilişkilere farklı bir bakış açısı sunar.</p>
+                        <div class="show-details">
+                            <span><i class="fas fa-star"></i> 8.5/10</span>
+                            <span><i class="fas fa-clock"></i> 22 dk</span>
+                            <span><i class="fas fa-film"></i> Komedi</span>
+                        </div>
+                        <button class="btn watch-btn" onclick="selectShow('Modern Family')">SEÇ</button>
+                    </div>
+                </div>
+                
+                <div class="show-card" id="black-mirror">
+                    <div class="show-image">
+                        <img src="bm.png" alt="Black Mirror">
+                    </div>
+                    <div class="show-content">
+                        <h3>Black Mirror</h3>
+                        <p class="show-description">Teknolojinin insanlık üzerindeki karanlık etkilerini anlatan, düşündürücü ve sarsıcı bir antoloji dizisi.</p>
+                        <div class="show-details">
+                            <span><i class="fas fa-star"></i> 8.8/10</span>
+                            <span><i class="fas fa-clock"></i> 60 dk</span>
+                            <span><i class="fas fa-film"></i> Bilim-Kurgu</span>
+                        </div>
+                        <button class="btn watch-btn" onclick="selectShow('Black Mirror')">SEÇ</button>
+                    </div>
+                </div>
+                
+                <div class="show-card" id="new-show">
+                    <div class="show-image new-show-image">
+                        <img src="s.jpeg" alt="Yeni Dizi" style="object-fit: cover; width: 100%; height: 100%;">
+                    </div>
+                    <div class="show-content">
+                        <h3>Yeni Dizi Öner</h3>
+                        <p class="show-description">Birlikte izlemek istediğiniz yeni bir dizi önerebilirsiniz. Kendi seçiminizi yapın.</p>
+                        <div class="new-show-form">
+                            <input type="text" id="new-show-input" placeholder="Dizi adı yazın...">
+                        </div>
+                        <button class="btn watch-btn" onclick="suggestNewShow()">ÖNER</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="selected-show" id="selected-show-container" style="display: none;">
+                <h2>Seçilen Dizi: <span id="selected-show-name"></span></h2>
+                <p>İzlemek için müsait olduğunuz zamanı seçin</p>
+                <div class="time-selector">
+                    <input type="date" id="watch-date" min="">
+                    <input type="time" id="watch-time">
+                </div>
+                <div class="phone-selector">
+                    <label for="phone-number">Telefon Numarası:</label>
+                    <input type="tel" id="phone-number" placeholder="+90 5XX XXX XX XX" pattern="[0-9+\s]{13,16}">
+                    <small>SMS bildirimi almak için telefon numaranızı girin (+90 ile başlayın)</small>
+                </div>
+                <button class="btn confirm-btn" onclick="confirmSelection()">RANDEVUYU ONAYLA</button>
+            </div>
+            
+            <div class="confirmation-message" id="confirmation-message" style="display: none;">
+                <i class="fas fa-check-circle"></i>
+                <h3>Dizi İzleme Randevunuz Oluşturuldu!</h3>
+                <p>Seçilen Dizi: <span id="confirmed-show"></span></p>
+                <p>Tarih/Saat: <span id="confirmed-datetime"></span></p>
+                <a href="index.html" class="btn">ANA SAYFAYA DÖN</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">S & İ</div>
+                <p>© 2023 Sencer & İncinaz. Tüm hakları saklıdır.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Bugünün tarihini minimum değer olarak ayarla
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('watch-date').min = today;
+        });
+        
+        function selectShow(showName) {
+            // Seçilen diziyi göster
+            document.getElementById('selected-show-name').textContent = showName;
+            document.getElementById('selected-show-container').style.display = 'block';
+            
+            // Sayfayı seçim bölümüne kaydır
+            document.getElementById('selected-show-container').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function suggestNewShow() {
+            const newShowName = document.getElementById('new-show-input').value.trim();
+            if (newShowName) {
+                selectShow(newShowName);
+            } else {
+                alert('Lütfen bir dizi adı girin.');
+            }
+        }
+        
+        function confirmSelection() {
+            const showName = document.getElementById('selected-show-name').textContent;
+            const watchDate = document.getElementById('watch-date').value;
+            const watchTime = document.getElementById('watch-time').value;
+            const phoneNumber = document.getElementById('phone-number').value.trim();
+            
+            if (!watchDate || !watchTime) {
+                alert('Lütfen tarih ve saat seçin.');
+                return;
+            }
+            
+            // Telefon numarası doğrulama
+            if (!phoneNumber || !phoneNumber.startsWith('+90') || phoneNumber.replace(/[\s+]/g, '').length < 12) {
+                alert('Geçerli bir telefon numarası girin. Format: +90 5XX XXX XX XX');
+                return;
+            }
+            
+            // Tarih formatını düzenle
+            const dateObj = new Date(watchDate + 'T' + watchTime);
+            const formattedDate = dateObj.toLocaleDateString('tr-TR', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+            const formattedTime = dateObj.toLocaleTimeString('tr-TR', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            // SMS mesajını hazırla
+            const smsMessage = `Sencer & İncinaz Dizi İzleme: "${showName}" dizisi için randevunuz ${formattedDate} ${formattedTime} olarak ayarlandı. İyi seyirler!`;
+            const encodedMessage = encodeURIComponent(smsMessage);
+            
+            // Onay mesajını göster
+            document.getElementById('confirmed-show').textContent = showName;
+            document.getElementById('confirmed-datetime').textContent = formattedDate + ' ' + formattedTime;
+            document.getElementById('confirmation-message').style.display = 'block';
+            document.getElementById('selected-show-container').style.display = 'none';
+            
+            // Sayfayı onay mesajına kaydır
+            document.getElementById('confirmation-message').scrollIntoView({ behavior: 'smooth' });
+            
+            // SMS bağlantısı oluştur - tüm boşlukları kaldırarak
+            const cleanPhoneNumber = phoneNumber.replace(/\s+/g, ''); // Boşlukları kaldır
+            const smsLink = `sms:${cleanPhoneNumber}?body=${encodedMessage}`;
+            
+            // SMS gönderme işlemi
+            setTimeout(() => {
+                if (confirm('Randevunuz onaylandı! SMS bildirimi göndermek istiyor musunuz?')) {
+                    window.location.href = smsLink;
+                }
+            }, 500);
+        }
+    </script>
+</body>
+</html> 

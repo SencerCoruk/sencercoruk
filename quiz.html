@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soru Oyunu | Sencer & İncinaz</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="quiz.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo left">İncinaz</div>
+            <div class="logo right">Sencer</div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Ana Sayfa</a></li>
+                <li><a href="index.html#etkinlikler">Etkinlikler</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="quiz-main">
+        <section class="quiz-container">
+            <h1>Soru Oyunu</h1>
+            <div class="quiz-content">
+                <div id="quiz-start">
+                    <h2>Oyuna Hoş Geldiniz!</h2>
+                    <p>Sencer ve İncinaz'ın özel soru oyununa hazır mısınız?</p>
+                    <div class="relationship-info">
+                        <h3>İlişki Soruları Yüklendi!</h3>
+                        <p>Sisteme 58 adet ilişki ve kişisel soru yüklenmiştir. Rastgele sorular cevaplayarak birbirinizi daha iyi tanıyabilirsiniz.</p>
+                    </div>
+                    <button id="start-button" class="btn mt-20">OYUNA BAŞLA</button>
+                </div>
+                
+                <div id="quiz-questions" style="display: none;">
+                    <div id="question-container">
+                        <h3 id="question-text">Soru metni burada gösterilecek</h3>
+                    </div>
+                    <div id="quiz-controls">
+                        <button id="next-button" class="btn">YENİ SORU</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">S & İ</div>
+                <p>© 2023 Sencer & İncinaz. Tüm hakları saklıdır.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="quiz.js"></script>
+</body>
+</html> 
